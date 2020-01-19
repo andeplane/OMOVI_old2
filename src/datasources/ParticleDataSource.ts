@@ -1,4 +1,4 @@
-import Particles from '../Particles';
+import Particles from './Particles';
 import DataSource from './DataSource';
 
 export default class ParticleDataSource extends DataSource {

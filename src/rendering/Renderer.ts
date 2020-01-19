@@ -7,7 +7,7 @@ export default class Renderer {
     this.renderer = new THREE.WebGLRenderer();
   }
 
-  render(scene: THREE.Scene, camera: THREE.PerspectiveCamera) {
+  render(scene: THREE.Scene, camera: THREE.PerspectiveCamera): void {
     this.renderer.render(scene, camera);
   }
 }

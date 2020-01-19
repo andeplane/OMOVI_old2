@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import ParticleDataSource from "../datasources/ParticleDataSource";
-import Particles from '../Particles';
+import Particles from '../datasources/Particles';
 import DataRenderer from './DataRenderer';
 
 interface ObjectMap {

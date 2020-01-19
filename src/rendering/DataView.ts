@@ -1,5 +1,5 @@
-import DataSource from "./datasources/DataSource";
-import DataRenderer from "./renderers/DataRenderer";
+import DataSource from "../datasources/DataSource";
+import DataRenderer from "../datarenderers/DataRenderer";
 
 export default class DataView {
   _dataSource: DataSource;
