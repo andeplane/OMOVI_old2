@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@types/three": "^0.103.2",
+    "mixpanel-browser": "^2.33.1",
     "three": "^0.112.1",
     "uuid": "^3.4.0"
   }

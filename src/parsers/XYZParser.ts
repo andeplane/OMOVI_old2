@@ -2,6 +2,7 @@ import { ParticleDataSource, ParticleFrame } from '../datasources/ParticleDataSo
 import AtomTypes from '../helpers/AtomTypes';
 import { Color } from '../types/Color';
 import { Position } from '../types/Position';
+import mixpanel from 'mixpanel-browser';
 
 interface ReadPositionReturnValue {
   id: number;
@@ -10,7 +11,7 @@ interface ReadPositionReturnValue {
   color: Color;
 }
 
-function addParticlesToFrame(lines: string[], numParticles: number, i: number, frame: ParticleFrame) {
+function addParticlesToFrame(lines: string[], numParticles: number, i: number, frame: ParticleFrame): void {
   for (let j = 0; j < numParticles; j++) {
     const lineData = lines[i + j].split(/\s+/).filter(Boolean);
     const element = lineData[0];
@@ -25,6 +26,7 @@ function addParticlesToFrame(lines: string[], numParticles: number, i: number, f
 }
 
 export default function(data: string): ParticleDataSource {
+  mixpanel.time_event("XYZParser.parse");
   const dataSource = new ParticleDataSource();
   const lines = data.split('\n');
   const numLines = lines.length;
@@ -32,6 +34,8 @@ export default function(data: string): ParticleDataSource {
   let skipNextLine = false;
   let readNumParticles = true;
   let numParticles;
+  let differentParticleCount = false;
+  
   while (i < numLines) {
     if (lines[i] === "") {
       i += 1;
@@ -40,7 +44,11 @@ export default function(data: string): ParticleDataSource {
     if (skipNextLine) {
       skipNextLine = false;
     } else if (readNumParticles) {
-      numParticles = parseInt(lines[i], 10);
+      const numParticlesThisFrame = parseInt(lines[i], 10);
+      if (numParticles != null && numParticles !== numParticlesThisFrame) {
+        differentParticleCount = true;
+      }
+      numParticles = numParticlesThisFrame;
 
       if (isNaN(numParticles)) {
         console.log("Warning, got NaN as numParticles");
@@ -65,5 +73,12 @@ export default function(data: string): ParticleDataSource {
 
     i++;
   }
+
+  mixpanel.track("XYZParser.parse", {
+    bytes: data.length,
+    differentParticleCount,
+    numFrames: dataSource.frames.length
+  });
+
   return dataSource;
 }
