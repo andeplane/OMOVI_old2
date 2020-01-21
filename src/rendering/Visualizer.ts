@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Renderer from './SceneRenderer';
-import DataView from './DataView';
+import DataRenderer from '../datarenderers/DataRenderer';
 
 interface ObjectMap {
   [key: string]: THREE.Object3D;
@@ -13,17 +13,18 @@ export default class Visualizer {
   _renderer: Renderer = new Renderer();
   _controls: OrbitControls
   _objectMap: ObjectMap = {};
-  _dataViews: DataView[] = [];
+  _dataRenderers: DataRenderer[] = [];
   _directionalLight: THREE.DirectionalLight;
   _ambientLight: THREE.AmbientLight;
   _objects: THREE.Group = new THREE.Group();
   
   constructor() {
-    this.addLights();
+    this._addLights();
     this._renderer.renderer.setSize( window.innerWidth, window.innerHeight );
     
     this._controls = new OrbitControls(this._camera, this._renderer.renderer.domElement);
     this._camera.position.set(0, 0, -50);
+    this._controls.update();
 
     this._scene.add(this._objects);
     
@@ -31,7 +32,7 @@ export default class Visualizer {
     this._animate();
   }
   
-  addLights = (): void => {
+  _addLights = (): void => {
     this._ambientLight = new THREE.AmbientLight("#fff", 0.5);
     this._scene.add(this._ambientLight);
     this._directionalLight = new THREE.DirectionalLight("#fff", 0.5);
@@ -39,8 +40,8 @@ export default class Visualizer {
     this._scene.add(this._directionalLight);
   }
 
-  add = (dataView: DataView): void => {
-    this._dataViews.push(dataView);
+  add = (dataRenderer: DataRenderer): void => {
+    this._dataRenderers.push(dataRenderer);
   }
 
   onWindowResize = (): void => {
@@ -54,8 +55,8 @@ export default class Visualizer {
     // this._controls.update();
 
     // Add any missing visible objects
-    this._dataViews.forEach(dataView => {
-      const object = dataView.getObject3D();
+    this._dataRenderers.forEach(dataRenderer => {
+      const object = dataRenderer.getObject3D();
       if (this._objectMap[object.uuid] == null) {
         this._objects.add(object);
         this._objectMap[object.uuid] = object;
@@ -65,8 +66,8 @@ export default class Visualizer {
     // Find visible objects only
     this._objects.children.forEach(child => {
       child.visible = false;
-      this._dataViews.forEach(dataView => {
-        if (dataView.getObject3D() === child) {
+      this._dataRenderers.forEach(dataRenderer => {
+        if (dataRenderer.getObject3D() === child) {
           child.visible = true;
         }
       });

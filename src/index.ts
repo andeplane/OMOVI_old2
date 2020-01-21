@@ -1,5 +1,4 @@
 import Visualizer from './rendering/Visualizer';
-import DataView from './rendering/DataView';
 import SphereRenderer from './datarenderers/SphereRenderer';
 import { ParticleDataSource } from './datasources/ParticleDataSource';
 import parseXYZ from './parsers/XYZParser';
@@ -13,7 +12,6 @@ mixpanel.init("9c10a22f17662a08120a610f192de07f", {opt_out_tracking_by_default: 
 //   SphereRenderer,
 //   ParticleDataSource,
 //   parseXYZ,
-//   DataView
 // }
 
 const visualizer = new Visualizer();
@@ -26,14 +24,13 @@ fetch("https://raw.githubusercontent.com/andeplane/OMOVI/master/example_files/si
   // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
   window.dataSource = dataSource;
-  const sphereRenderer = new SphereRenderer();
-  const dataView = new DataView(dataSource, sphereRenderer);
-  visualizer.add(dataView);
+  const sphereRenderer = new SphereRenderer(dataSource)
+  visualizer.add(sphereRenderer);
 
   const animate = () => {
-    dataSource._currentFrameIndex += 1;
-    if (dataSource._currentFrameIndex >= dataSource.frames.length) {
-      dataSource._currentFrameIndex = 0;
+    dataSource._currentFrame += 1;
+    if (dataSource._currentFrame >= dataSource.frames.length) {
+      dataSource._currentFrame = 0;
     }
   }
   setInterval(animate, 60);

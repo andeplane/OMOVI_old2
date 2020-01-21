@@ -24,9 +24,13 @@ function constructObject3D(frame: ParticleFrame): THREE.Object3D {
 
 export default class SphereRenderer implements DataRenderer {
   _objectMap: ObjectMap = {};
+  dataSource: ParticleDataSource;
+  constructor(dataSource: ParticleDataSource) {
+    this.dataSource = dataSource;
+  }
   
-  getObject3D(dataSource: ParticleDataSource): THREE.Object3D {
-    const frame = dataSource.currentFrame();
+  getObject3D(): THREE.Object3D {
+    const frame = this.dataSource.currentFrame();
     if (!this._objectMap[frame.uuid]) {
       this._objectMap[frame.uuid] = constructObject3D(frame);
     }

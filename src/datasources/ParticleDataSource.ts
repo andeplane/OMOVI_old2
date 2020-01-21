@@ -47,7 +47,7 @@ export class ParticleFrame {
 }
 
 export class ParticleDataSource implements DataSource {
-  _currentFrameIndex = 0;
+  _currentFrame = 0;
   frames: ParticleFrame[] = [];
 
   addFrame(frame: ParticleFrame): void {
@@ -55,6 +55,6 @@ export class ParticleDataSource implements DataSource {
   }
 
   currentFrame(): ParticleFrame {
-    return this.frames[this._currentFrameIndex];
+    return this.frames[this._currentFrame];
   }
 }
