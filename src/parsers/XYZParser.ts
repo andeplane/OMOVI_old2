@@ -17,11 +17,17 @@ function addParticlesToFrame(lines: string[], numParticles: number, i: number, f
     const element = lineData[0];
     
     const atomType = AtomTypes[element];
+    let color = {r: 255, g: 102, b: 102};
+    let radius = 1.0;
+    if (atomType) {
+      radius = atomType.radius;
+      color = atomType.color;
+    }
     const id = j;
     const x = parseFloat(lineData[1]);
     const y = parseFloat(lineData[2]);
     const z = parseFloat(lineData[3]);
-    frame.add(id, {x, y, z}, atomType.radius, atomType.color);
+    frame.add(id, {x, y, z}, radius, color);
   }
 }
 
