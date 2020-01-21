@@ -33,13 +33,18 @@ export default function(data: string): ParticleDataSource {
   let readNumParticles = true;
   let numParticles;
   while (i < numLines) {
+    if (lines[i] === "") {
+      i += 1;
+      continue;
+    }
     if (skipNextLine) {
       skipNextLine = false;
     } else if (readNumParticles) {
       numParticles = parseInt(lines[i], 10);
 
       if (isNaN(numParticles)) {
-        return;
+        console.log("Warning, got NaN as numParticles");
+        return null;
       }
 
       readNumParticles = false;
@@ -60,7 +65,5 @@ export default function(data: string): ParticleDataSource {
 
     i++;
   }
-
-
   return dataSource;
 }

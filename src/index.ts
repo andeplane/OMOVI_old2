@@ -12,23 +12,17 @@ import parseXYZ from './parsers/XYZParser';
 //   DataView
 // }
 console.log("Will start")
-
-fetch("http://folk.uio.no/anderhaf/faceted_cylinder.xyz", {mode: 'no-cors'})
-.then(response => response.text())
-.then(data=> console.log(data))
-.catch(error => console.error(error));
-
-// fetch("http://folk.uio.no/anderhaf/faceted_cylinder.xyz",
-// { mode: 'no-cors'}).then(async result => {
-//   const contents = await result.text();
-//   console.log("contents: ", contents);
-// })
-
 const visualizer = new Visualizer();
-// const dataSource = parseXYZ("");
-// const sphereRenderer = new SphereRenderer();
-// const dataView = new DataView(dataSource, sphereRenderer);
-// visualizer.add(dataView);
 document.body.appendChild( visualizer._renderer.renderer.domElement );
+
+fetch("https://raw.githubusercontent.com/andeplane/OMOVI/master/example_files/faceted_cylinder.xyz").then(async result => {
+  const contents = await result.text();
+  const dataSource = parseXYZ(contents);
+  console.log("dataSource: ", dataSource);
+  const sphereRenderer = new SphereRenderer();
+  const dataView = new DataView(dataSource, sphereRenderer);
+  visualizer.add(dataView);
+})
+
 
 console.log("Got it")

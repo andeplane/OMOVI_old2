@@ -22,7 +22,7 @@ export class ParticleFrame {
     this.color = {
       r: new Float32Array(capacity),
       g: new Float32Array(capacity),
-      b: new Float32Array(capacity),
+      b: new Float32Array(capacity)
     }
     this.id = new Float32Array(capacity);
   }
