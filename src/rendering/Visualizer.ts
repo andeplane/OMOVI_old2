@@ -2,30 +2,30 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Renderer from './SceneRenderer';
 import DataRenderer from '../datarenderers/DataRenderer';
+import ComboControls from '@cognite/three-combo-controls';
 
 interface ObjectMap {
   [key: string]: THREE.Object3D;
 }
 
 export default class Visualizer {
-  _scene: THREE.Scene = new THREE.Scene();
-  _camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 1.0, 100);
-  _renderer: Renderer = new Renderer();
-  _controls: OrbitControls
+  _scene = new THREE.Scene();
+  _camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 1.0, 100);
+  _renderer = new Renderer();
+  _controls: ComboControls
   _objectMap: ObjectMap = {};
   _dataRenderers: DataRenderer[] = [];
   _directionalLight: THREE.DirectionalLight;
   _ambientLight: THREE.AmbientLight;
-  _objects: THREE.Group = new THREE.Group();
-  
+  _objects = new THREE.Group();
+  _clock = new THREE.Clock();
   constructor() {
     this._addLights();
     this._renderer.renderer.setSize( window.innerWidth, window.innerHeight );
     
-    this._controls = new OrbitControls(this._camera, this._renderer.renderer.domElement);
-    this._camera.position.set(0, 0, -50);
-    this._controls.update();
-
+    this._controls = new ComboControls(this._camera, this._renderer.renderer.domElement);
+    this._controls.setState(new THREE.Vector3(0, 0, -50), new THREE.Vector3(0, 0, 0));
+    
     this._scene.add(this._objects);
     
     window.addEventListener( 'resize', this.onWindowResize, false );
@@ -52,8 +52,7 @@ export default class Visualizer {
 
   _animate = (): void => {
     requestAnimationFrame(this._animate.bind(this));
-    // this._controls.update();
-
+    this._controls.update(this._clock.getDelta());
     // Add any missing visible objects
     this._dataRenderers.forEach(dataRenderer => {
       const object = dataRenderer.getObject3D();

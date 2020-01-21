@@ -18,6 +18,7 @@
     "typescript": "^3.7.4"
   },
   "dependencies": {
+    "@cognite/three-combo-controls": "^1.4.1",
     "@types/three": "^0.103.2",
     "mixpanel-browser": "^2.33.1",
     "three": "^0.112.1",

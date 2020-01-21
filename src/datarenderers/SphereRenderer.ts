@@ -12,7 +12,7 @@ function constructObject3D(frame: ParticleFrame): THREE.Object3D {
   for (let i = 0; i < frame.count; i++) {
     const color = `rgb(${frame.color.r[i]}, ${frame.color.g[i]}, ${frame.color.b[i]})`;
 
-    const geometry = new THREE.SphereGeometry( 1, 4, 4 );
+    const geometry = new THREE.SphereGeometry( 1, 5, 5 );
     const material = new THREE.MeshPhongMaterial( {color} );
     const mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(frame.position.x[i], frame.position.y[i], frame.position.z[i]);
