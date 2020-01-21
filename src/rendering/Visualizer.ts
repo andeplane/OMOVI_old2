@@ -57,18 +57,13 @@ export default class Visualizer {
     this._dataViews.forEach(dataView => {
       const object = dataView.getObject3D();
       if (this._objectMap[object.uuid] == null) {
-        this._scene.add(object);
+        this._objects.add(object);
         this._objectMap[object.uuid] = object;
       }
     });
 
     // Find visible objects only
     this._objects.children.forEach(child => {
-      if (child instanceof THREE.Light) {
-        child.visible = true;
-        return;
-      }
-
       child.visible = false;
       this._dataViews.forEach(dataView => {
         if (dataView.getObject3D() === child) {
