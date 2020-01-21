@@ -40,7 +40,8 @@ export default function(data: string): ParticleDataSource {
   let skipNextLine = false;
   let readNumParticles = true;
   let numParticles;
-  let differentParticleCount = false;
+  let sameParticleCountAllFrames = true;
+  let maxNumParticles = 0;
   
   while (i < numLines) {
     if (lines[i] === "") {
@@ -52,9 +53,10 @@ export default function(data: string): ParticleDataSource {
     } else if (readNumParticles) {
       const numParticlesThisFrame = parseInt(lines[i], 10);
       if (numParticles != null && numParticles !== numParticlesThisFrame) {
-        differentParticleCount = true;
+        sameParticleCountAllFrames = false;
       }
       numParticles = numParticlesThisFrame;
+      maxNumParticles = Math.max(numParticles, maxNumParticles);
 
       if (isNaN(numParticles)) {
         console.log("Warning, got NaN as numParticles");
@@ -82,8 +84,9 @@ export default function(data: string): ParticleDataSource {
 
   mixpanel.track("XYZParser.parse", {
     bytes: data.length,
-    differentParticleCount,
-    numFrames: dataSource.frames.length
+    numFrames: dataSource.frames.length,
+    sameParticleCountAllFrames,
+    maxNumParticles
   });
 
   return dataSource;
