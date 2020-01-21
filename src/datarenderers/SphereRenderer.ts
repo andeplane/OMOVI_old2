@@ -1,6 +1,5 @@
 import * as THREE from 'three';
-import ParticleDataSource from "../datasources/ParticleDataSource";
-import Particles from '../datasources/Particles';
+import {ParticleDataSource, Particles} from "../datasources/ParticleDataSource";
 import DataRenderer from './DataRenderer';
 
 interface ObjectMap {
@@ -11,8 +10,8 @@ function constructObject3D(frame: Particles): THREE.Object3D {
   const object = new THREE.Object3D();
 
   for (let i = 0; i < frame.count; i++) {
-    const geometry = new THREE.SphereGeometry( 5, 32, 32 );
-    const material = new THREE.MeshPhongMaterial( {color: 0xffff00} );
+    const geometry = new THREE.SphereGeometry( 1, 32, 32 );
+    const material = new THREE.MeshPhongMaterial( {color: 0xff0000} );
     const mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(frame.position.x[i], frame.position.y[i], frame.position.z[i]);
     object.add(mesh);
@@ -21,7 +20,7 @@ function constructObject3D(frame: Particles): THREE.Object3D {
   return object;
 }
 
-export default class SphereRenderer extends DataRenderer {
+export default class SphereRenderer implements DataRenderer {
   _objectMap: ObjectMap = {};
   
   getObject3D(dataSource: ParticleDataSource): THREE.Object3D {

@@ -1,3 +1,3 @@
-export default class DataSource {
-  _currentFrameIndex = 0;
+export default interface DataSource {
+  _currentFrameIndex: number;
 }
