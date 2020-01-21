@@ -1,13 +1,12 @@
 import * as THREE from 'three';
-import {ParticleDataSource, Particles} from "../datasources/ParticleDataSource";
+import {ParticleDataSource, ParticleFrame} from "../datasources/ParticleDataSource";
 import DataRenderer from './DataRenderer';
-import rgbHex from 'rgb-hex';
 
 interface ObjectMap {
   [key: string]: THREE.Object3D;
 } 
 
-function constructObject3D(frame: Particles): THREE.Object3D {
+function constructObject3D(frame: ParticleFrame): THREE.Object3D {
   const object = new THREE.Object3D();
 
   for (let i = 0; i < frame.count; i++) {
